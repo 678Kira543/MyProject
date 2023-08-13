@@ -1,13 +1,13 @@
 @extends('template')
+@section('title', $product->title.' от '.$product->author)
 @section('content')
-    <title>{{$product->title}} от {{$product->author}}</title>
     <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
-    <div id="carouselExampleControls" class="carousel slide mt-5" data-bs-ride="carousel">
+    <div id="carouselExampleControls" class="carousel slide mt-3" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img class="card-img w-70" src="{{$product->img1}}"/>

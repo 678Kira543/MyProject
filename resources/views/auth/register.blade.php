@@ -31,8 +31,9 @@
                 <input type="password" class="form-control" name="password_confirmation" placeholder="Подтверждение пароля">
             </div>
             <div class="mb-3">
-                <input type="submit" value="Зарегестрироваться" class="btn btn-success form-control">
+                <input type="submit" value="Зарегистрироваться" class="btn btn-success form-control">
             </div>
+            <p>Есть аккаунт? <a class="fw-bold text-dark" style="text-decoration: none" href="/login">Авторизуйтесь</a></p>
         </form>
     </div>
 @endsection

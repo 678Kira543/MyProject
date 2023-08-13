@@ -1,6 +1,6 @@
 @extends('template')
+@section('title', 'Корзина')
 @section('content')
-    <title>Корзина</title>
     <section>
         <div class="container-fluid">
             <div class="row d-flex justify-content-center my-4">
@@ -22,29 +22,25 @@
                                         <h3><strong>{{$cart->name}}</strong></h3>
                                         <p>{{$cart->author}}</p>
                                         <p>{{$cart->cost}}₽</p>
+                                        <h5 class="my-0" id="total_{{$cart->id}}">{{$cart->cost * $cart->quantity}}₽</h5>
+
                                     </div>
 
                                     <div class="col">
                                         <button class="btn btn-outline-success bi bi-dash" onclick="changeQuantity('minus', this)"></button>
-                                        <span class="h4 mx-3" data-cost="{{$cart->cost}}">{{$cart->quantity}}</span>
+                                        <span class="h4 mx-3" data-item-id="{{$cart->id}}" data-cost="{{$cart->cost}}">{{$cart->quantity}}</span>
                                         <button class="btn btn-outline-success bi bi-plus" onclick="changeQuantity('plus', this)"></button>
                                     </div>
-                                        <!-- Price -->
-
-                                        <!-- Price -->
                                     </div>
                                 </div>
                                 <hr>
                             @endforeach
-
-                <div class="col-md-6">
+                <div class="container col-md-6">
                     <div class="card mb-4">
                         <div class="card-body">
                             <h3 class="sm-2">Сумма:</h3>
-                            <h5>{{$cart->cost}}₽</h5>
-                            <button type="button" class="btn btn-success btn-lg my-2">
-                                Оплатить
-                            </button>
+                            <h5 id="subtotal">₽</h5>
+                            <a type="button" class="btn btn-success btn-lg my-2" href="/myOrders">Оплатить</a>
                         </div>
                     </div>
                 </div>
@@ -52,7 +48,7 @@
         </div>
      </div>
     </div>
-    </div>
+        @csrf
     </section>
     <script>
         function changeQuantity(action, btn){
@@ -65,8 +61,34 @@
                 if(quantity.innerText <= '1') return;
                 quantity.innerText = +quantity.innerText - 1;
             }
+            let cartId = quantity.dataset.itemId;
             let total = quantity.dataset.cost * quantity.innerText;
-            console.log(total);
+            let totalBlock = document.getElementById("total_"+cartId);
+            totalBlock.innerText = total+'₽';
+            calcSubtotal();
+            let csrf = document.getElementsByName('_token')[0].value;
+            let formData = new FormData();
+            formData.append("cartId", cartId);
+            formData.append("quantity", quantity.innerText);
+            formData.append("_token", csrf);
+            fetch('/changeQuantity', {
+                method: "post",
+                body: formData
+            }).then(response=>response.json())
+                .then(result=>{
+                    console.log(result);
+                });
         }
+
+        function calcSubtotal(){
+            let subtotal = document.getElementById('subtotal');
+            let totals = document.querySelectorAll('[id^="total_"]');
+            let subtotalValue = 0;
+            totals.forEach(totalBlock=>{
+                subtotalValue = subtotalValue + Number(totalBlock.innerText.replace('₽', ''));
+            });
+            subtotal.innerText = subtotalValue+'₽';
+        }
+        calcSubtotal();
     </script>
 @endsection

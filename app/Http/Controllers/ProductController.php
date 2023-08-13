@@ -10,14 +10,21 @@ class ProductController extends Controller
     {
         $title = $request->title;
         $cost = $request->cost;
-        $description = $request->descriptionField;
-        $product = new \App\Models\Product();
+        $author = $request->author;
+        $img1 = $request->img1;
+        $img2 = $request->img2;
+        $img3 = $request->img3;
+        $description = $request->description;
+        $product = new Product();
         $product->title = $title;
         $product->cost = $cost;
+        $product->author = $author;
+        $product->img1 = $img1;
+        $product->img2 = $img2;
+        $product->img3 = $img3;
         $product->description = $description;
-        $product->author_id = 2;
         $product->save();
-        return redirect()->intended('/addProduct');
+        return redirect()->intended('/mainPage');
     }
 
     public function showProductById(Request $request)
@@ -26,9 +33,12 @@ class ProductController extends Controller
         $product = Product::where('id', $productId)->first();
         $reviews = Review::where('product_id', $productId)->get();
         $userId = auth()->user()->getAuthIdentifier();
-        $bindRole = BindRole::where('user_id', $userId)->first();
-        $isAdmin = $bindRole->role_id == 2;
-        return view('pages.product', ['product' => $product, 'reviews' => $reviews, 'isAdmin' => $isAdmin]);
+        if(BindRole::where('user_id', $userId)->first()){
+            $bindRole = BindRole::where('user_id', $userId)->first();
+            $isAdmin = $bindRole->role_id == 2;
+            return view('pages.product', ['product' => $product, 'reviews' => $reviews, 'isAdmin' => $isAdmin]);
+        }
+        return view('pages.product', ['product' => $product, 'reviews' => $reviews, 'isAdmin' => '']);
     }
 
     public function addReview(Request $request)

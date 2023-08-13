@@ -21,9 +21,11 @@
         <div class="mb-3">
             <input type="password" name="password" class="form-control" placeholder="Пароль">
         </div>
+
         <div class="mb-3">
             <input type="submit" value="Авторизоваться" class="btn btn-success form-control">
         </div>
+        <p>Нет аккаунта? <a class="fw-bold text-dark"  style="text-decoration: none" href="/register">Зарегистрируйтесь</a></p>
     </form>
 </div>
 </div>

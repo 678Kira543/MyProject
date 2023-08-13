@@ -2,15 +2,6 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 class UserController extends Controller {
-    public function changeUserAvatar(Request $request){
-        $path =  $request->file('userAvatar')->store('public/avatars');
-        $path = str_replace('public', 'storage', $path);
-        $userID = auth()->user()->getAuthIdentifier();
-        $user = \App\Models\User::where('id', $userID)->first();
-        $user->img = $path;
-        $user->save();
-        return redirect()->intended('/profile');
-    }
     public function updateUserData(Request $request){
         $name = $request->nameSpan;
         $lastname = $request->lastnameSpan;
